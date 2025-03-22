@@ -105,7 +105,7 @@ Open the .env file and set your API keys. For example:
 GOOGLE_API_KEY=your_google_api_key
 ```
 
-U## Usage
+## Usage
 
 ### Document Upload & Processing
 
@@ -113,7 +113,8 @@ U## Usage
   Use the provided uploaders to submit your documents. You can upload PDFs, images, or both based on your selected mode.
 
 - **Process Files:**  
-  Click the **"✨ Process Files"** button to extract text, metadata, and visual data from the uploaded files. The application will combine and process the content for further analysis.
+  Click the **"
+  Process Files"** button to extract text, metadata, and visual data from the uploaded files. The application will combine and process the content for further analysis.
 
 ### Interacting with InsightX
 

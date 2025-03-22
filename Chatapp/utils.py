@@ -22,6 +22,8 @@ import json
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from google.cloud import vision
 from gtts import gTTS
+from chat_history import load_chat_history
+import easyocr
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -41,7 +43,15 @@ def get_pdf_text(pdf_docs):
         for page in pdf_reader.pages:
             text += page.extract_text() or ""
     return metadata_info + text
-    
+import numpy as np
+
+def extract_text_easyocr(image):
+    reader = easyocr.Reader(['en'], gpu=False, verbose=False)
+    image = image.convert("RGB")
+    image_np = np.array(image)
+    result = reader.readtext(image_np, detail=0)  
+    return "\n".join(result)
+
 def get_keyword_frequencies(text):
     words = re.findall(r'\b\w+\b', text.lower())
     filtered_words = [word for word in words if word not in ENGLISH_STOP_WORDS and len(word) > 2]
@@ -107,36 +117,6 @@ def show_insights_dashboard(entities, combined_text):
     else:
         st.info("No words available for word cloud.")
 
-def extract_text_from_images(uploaded_images, vision_model_available=False, genai=None):
-    extracted_text = ""
-    client = vision.ImageAnnotatorClient()
-    processed_images = []
-    for image_file in uploaded_images:
-        try:
-            image = Image.open(image_file)
-            image.thumbnail((1000, 1000))
-            with io.BytesIO() as image_buffer:
-                image.save(image_buffer, format="PNG")
-                content = image_buffer.getvalue()
-            processed_images.append(vision.Image(content=content))
-        except Exception as e:
-            extracted_text += f"\n[Error Processing Image]: {str(e)}\n"
-    if processed_images:
-        requests = [vision.AnnotateImageRequest(image=img) for img in processed_images]
-        responses = client.batch_annotate_images(requests=requests)
-        for idx, response in enumerate(responses.responses):
-            ocr_text = response.text_annotations[0].description if response.text_annotations else "No text found"
-            extracted_text += f"\n[OCR Output - Image {idx+1}]\n{ocr_text}\n"
-            if vision_model_available and genai and ocr_text.strip():
-                vision_model = genai.GenerativeModel("models/gemini-1.5-pro-vision")
-                image_base64 = base64.b64encode(processed_images[idx].content).decode('utf-8')
-                image_data_uri = f"data:image/png;base64,{image_base64}"
-                response = vision_model.generate_content([image_data_uri, "Extract key information, summarize."])
-                extracted_text += f"\n[Gemini Vision Insights]\n{response.text}\n"
-            else:
-                extracted_text += "\n[Fallback: Text model will handle OCR text]\n"
-    return extracted_text
-
 def get_text_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=50000, chunk_overlap=1000)
     chunks = text_splitter.split_text(text)
@@ -201,17 +181,25 @@ def summarize_text(text):
 
 def display_chat_history():
     st.markdown("<h4 style='margin-bottom:10px;'>📜 Chat History</h4>", unsafe_allow_html=True)
-    if "chat_history" in st.session_state and st.session_state.chat_history:
-        for chat in reversed(st.session_state.chat_history):
-            st.markdown(
-                f"""
+
+    chat_history = load_chat_history()
+
+    if chat_history:
+        pdf_grouped = {}
+        for pdf, question, answer in chat_history:
+            if pdf not in pdf_grouped:
+                pdf_grouped[pdf] = []
+            pdf_grouped[pdf].append((question, answer))
+
+        for pdf, chats in pdf_grouped.items():
+            st.markdown(f"### 📄 Chat from **{pdf}**")
+            for question, answer in chats:
+                st.markdown(f"""
                 <div style='padding: 10px; margin-bottom: 10px; background: #F0F0F5; border-left: 5px solid #6C63FF; border-radius: 8px;'>
-                    <b>Q:</b> {chat['question']}<br>
-                    <b>A:</b> {chat['answer']}
+                    <b>Q:</b> {question}<br>
+                    <b>A:</b> {answer}
                 </div>
-                """,
-                unsafe_allow_html=True
-            )
+                """, unsafe_allow_html=True)
     else:
         st.info("No chat history available yet.")
 

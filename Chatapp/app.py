@@ -1,4 +1,7 @@
-import utils
+from utils import display_chat_history,get_conversational_chain,get_keyword_frequencies,get_pdf_text,get_text_chunks,get_vector_store,show_insights_dashboard,semantic_search,summarize_text,classify_document_type,text_to_speech,user_input,user_input_with_context,extract_entities,extract_keywords,extract_text_easyocr,highlight_keywords
+from chat_history import save_chat_history,load_chat_history
+import streamlit as st
+from PIL import Image
 
 def main():
     st.set_page_config("InsightX", page_icon="🔍", layout="wide")
@@ -28,7 +31,6 @@ def main():
         if mode in ["PDF + Images", "Images only"]:
             uploaded_images = st.file_uploader("Upload Images", accept_multiple_files=True, type=["png", "jpg", "jpeg"])
 
-        # Initialize session states
         if "combined_text" not in st.session_state:
             st.session_state["combined_text"] = None
         if "matched_chunks" not in st.session_state:
@@ -41,21 +43,36 @@ def main():
                 st.warning("⚠️ Please upload at least one PDF or Image before processing.")
             else:
                 with st.spinner("🔄 Processing your documents..."):
-                    combined_text = ""
+                    combined_text_pdf = ""
                     if pdf_docs:
                         st.info("🔍 Extracting from PDFs...")
-                        combined_text += get_pdf_text(pdf_docs)
+                        combined_text_pdf += get_pdf_text(pdf_docs)
 
                     if uploaded_images:
                         st.info("🔍 Extracting from Images...")
-                        combined_text += extract_text_from_images(uploaded_images)
-
+                        extracted_texts = []
+                        for uploaded_file in uploaded_images:
+                            image = Image.open(uploaded_file)  
+                            text = extract_text_easyocr(image)
+                            extracted_texts.append(text)
+                        combined_text_image = "\n".join(extracted_texts)
+                    combined_text=combined_text_pdf+combined_text_image
                     if not combined_text.strip():
                         st.error("⚠️ No text could be extracted! Please upload valid files.")
                     else:
                         st.info("🧠 Auto-Categorizing...")
-                        doc_type = classify_document_type(combined_text)
-                        st.success(f"🗂 Document Type: **{doc_type}**")
+
+                        if combined_text_image and combined_text_pdf:
+                            doc_type = classify_document_type(combined_text_pdf)
+                            st.success(f"🗂 Pdf Document Type: **{doc_type}**")
+                            doc_type = classify_document_type(combined_text_image)
+                            st.success(f"🗂 Image Type: **{doc_type}**")
+                        elif combined_text_image:
+                            doc_type = classify_document_type(combined_text_image)
+                            st.success(f"🗂 Image Type: **{doc_type}**")
+                        elif combined_text_pdf:
+                            doc_type = classify_document_type(combined_text_pdf)
+                            st.success(f"🗂 Pdf Document Type: **{doc_type}**")
 
                         st.session_state["combined_text"] = combined_text
                         text_chunks = get_text_chunks(combined_text)
@@ -72,23 +89,21 @@ def main():
     with col1:
         user_question = st.text_input("💬 Ask your question (Semantic Search Active)")
 
-        if user_question:
-            if not st.session_state["combined_text"]:
+        if user_question and (pdf_docs or uploaded_images):
+            selected_source = pdf_docs[0].name if pdf_docs else uploaded_images[0].name
+
+            if not st.session_state.get("combined_text"):
                 st.warning("⚠️ Please process documents before asking questions.")
             else:
                 answer, matched_chunks = user_input_with_context(user_question)
                 st.write("🤖 **AI Response:**", answer)
-                
+
                 if st.button("🎙️ Get Voice Assistant"):
                     text_to_speech(answer)
 
-                if "chat_history" not in st.session_state:
-                    st.session_state.chat_history = []
+                st.session_state["matched_chunks"] = matched_chunks
+                save_chat_history(selected_source, user_question, answer)
 
-                if not st.session_state.chat_history or st.session_state.chat_history[-1]["question"] != user_question:
-                    st.session_state.chat_history.append({"question": user_question, "answer": answer})
-
-                st.session_state["matched_chunks"] = matched_chunks  
                 display_chat_history()
 
     with col2:

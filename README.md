@@ -6,21 +6,18 @@ InsightX is an advanced AI-driven solution designed to extract, analyze, and sum
 
 ## Table of Contents
 
+- [Deployment](#deployment)
 - [Features](#features)
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
-- [Deployment](#deployment)
-- [Contribution Guidelines](#contribution-guidelines)
-- [License](#license)
-- [Contact](#contact)
 
 ---
 
-## Overview
+## Deployment
 
-InsightX streamlines document processing by extracting text from PDFs and images, performing entity recognition and semantic search, and providing interactive visual insights. It is ideal for businesses and individuals looking to automate data extraction and gain meaningful insights from unstructured data.
+[https://ai-insightx.streamlit.app/](https://ai-insightx.streamlit.app/)
 
 ---
 

@@ -1,152 +1,133 @@
-\# InsightX: AI-Powered Document & Visual Assistant
+# InsightX: AI-Powered Document & Visual Assistant
 
-InsightX is an advanced AI-driven solution designed to extract, analyze,
-and summarize content from PDFs and images. Leveraging state-of-the-art
-OCR, semantic search, and data visualization techniques, InsightX
-empowers users to gain actionable insights from their documents quickly
-and efficiently.
+InsightX is an advanced AI-driven solution designed to extract, analyze, and summarize content from PDFs and images. Leveraging state-of-the-art OCR, semantic search, and data visualization techniques, InsightX empowers users to gain actionable insights from their documents quickly and efficiently.
 
-\-\--
+---
 
-\## Table of Contents
+## Table of Contents
 
-\- \[Overview\](#overview) - \[Features\](#features) - \[System
-Requirements\](#system-requirements) - \[Installation\](#installation) -
-\[Configuration\](#configuration) - \[Usage\](#usage) -
-\[Deployment\](#deployment) - \[Contribution
-Guidelines\](#contribution-guidelines) - \[License\](#license) -
-\[Contact\](#contact)
+- [Features](#features)
+- [System Requirements](#system-requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Deployment](#deployment)
+- [Contribution Guidelines](#contribution-guidelines)
+- [License](#license)
+- [Contact](#contact)
 
-\-\--
+---
 
-\## Overview
+## Overview
 
-InsightX streamlines document processing by extracting text from PDFs
-and images, performing entity recognition and semantic search, and
-providing interactive visual insights. It is ideal for businesses and
-individuals looking to automate data extraction and gain meaningful
-insights from unstructured data.
+InsightX streamlines document processing by extracting text from PDFs and images, performing entity recognition and semantic search, and providing interactive visual insights. It is ideal for businesses and individuals looking to automate data extraction and gain meaningful insights from unstructured data.
 
-\-\--
+---
 
-\## Features
+## Features
 
-\- \*\*Document Processing\*\*  - Extract text from PDFs and images
-using advanced OCR.
+- **Document Processing**  
+  - Extract text from PDFs and images using advanced OCR.
+  
+- **Metadata Extraction**  
+  - Retrieve key metadata for enhanced document insights.
+  
+- **Keyword Analysis**  
+  - Identify frequent terms and visualize them with bar charts and word clouds.
+  
+- **Entity Recognition**  
+  - Automatically extract names, dates, organizations, invoice numbers, and totals.
+  
+- **Document Classification**  
+  - Automatically categorize documents (e.g., Invoices, Reports, Contracts).
+  
+- **AI-Powered Q&A**  
+  - Leverage semantic search for context-based querying of document content.
+  
+- **Semantic Search**  
+  - Find and highlight relevant document sections using vector-based search.
+  
+- **Visual Insights**  
+  - Generate dynamic visualizations such as pie charts and bar graphs.
+  
+- **Summarization**  
+  - Produce concise summaries of lengthy documents.
+  
+- **Text-to-Speech**  
+  - Convert text into speech for improved accessibility.
 
-\- \*\*Metadata Extraction\*\*  - Retrieve key metadata for enhanced
-document insights.
+---
 
-\- \*\*Keyword Analysis\*\*  - Identify frequent terms and visualize
-them with bar charts and word clouds.
+## System Requirements
 
-\- \*\*Entity Recognition\*\*  - Automatically extract names, dates,
-organizations, invoice numbers, and totals.
+- **Python:** Version 3.7 or later  
+- **Libraries:**  
+  - Streamlit  
+  - Additional dependencies listed in `requirements.txt`
 
-\- \*\*Document Classification\*\*  - Automatically categorize documents
-(e.g., Invoices, Reports, Contracts).
+---
 
-\- \*\*AI-Powered Q&A\*\*  - Leverage semantic search for context-based
-querying of document content.
+## Installation
 
-\- \*\*Semantic Search\*\*  - Find and highlight relevant document
-sections using vector-based search.
+### 1. Clone the Repository
 
-\- \*\*Visual Insights\*\*  - Generate dynamic visualizations such as
-pie charts and bar graphs.
+```bash
+git clone https://github.com/KaviyaaPriyadharshini/AI-InsightX.git
+cd AI-InsightX
+```
 
-\- \*\*Summarization\*\*  - Produce concise summaries of lengthy
-documents.
+### 2. Create a Virtual Environment (Optional but Recommended)
+For macOS/Linux:
 
-\- \*\*Text-to-Speech\*\*  - Convert text into speech for improved
-accessibility.
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+For Windows:
 
-\-\--
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-\## System Requirements
+### 3. Install Dependencies
 
-\- \*\*Python:\*\* Version 3.7 or later  - \*\*Libraries:\*\*  -
-Streamlit  - gTTS  - Pillow  - Additional dependencies listed in
-\`requirements.txt\`
+```bash
+pip install -r requirements.txt
+```
 
-\-\--
+## Configuration
+Before running the application, verify and update the required configuration settings:
 
-\## Installation
+Open the .env file and set your API keys. For example:
 
-\### 1. Clone the Repository
+```bash
+GOOGLE_API_KEY=your_google_api_key
+```
 
-\`\`\`bash git clone
-https://github.com/KaviyaaPriyadharshini/AI-InsightX.git cd AI-InsightX
-2. Create a Virtual Environment (Optional but Recommended) For
-macOS/Linux:
+U## Usage
 
-bash Copy Edit python -m venv venv source venv/bin/activate For Windows:
+### Document Upload & Processing
 
-bash Copy Edit python -m venv venv venv\\Scripts\\activate 3. Install
-Dependencies bash Copy Edit pip install -r requirements.txt
-Configuration Before running the application, verify and update the
-required configuration settings:
+- **Upload Files:**  
+  Use the provided uploaders to submit your documents. You can upload PDFs, images, or both based on your selected mode.
 
-API Keys: Open the .env file and set your API keys. For example:
+- **Process Files:**  
+  Click the **"✨ Process Files"** button to extract text, metadata, and visual data from the uploaded files. The application will combine and process the content for further analysis.
 
-dotenv Copy Edit GOOGLE_API_KEY=your_google_api_key Additional
-Environment Variables: Add or update any environment variables as needed
-for your deployment environment.
+### Interacting with InsightX
 
-Usage Document Upload & Processing Upload Files:
+- **Ask Questions:**  
+  Type your query into the text input field. The AI engine leverages semantic search to provide context-based answers from the processed document content.
 
-PDFs: Use the PDF uploader to submit one or multiple files.
+- **Quick Actions:**  
+  Utilize the quick action buttons to:
+  - **Extract Entities:** Retrieve key entities (names, dates, organizations, etc.) from the content.
+  - **Generate Summaries:** Create concise summaries of lengthy documents.
+  - **Visualize Data:** Produce visual insights like charts and word clouds to represent keyword frequency and other metrics.
+  - **Text-to-Speech:** Convert the AI's textual response into speech for accessibility.
 
-Images: Use the image uploader to submit visual files (png, jpg, jpeg).
+- **View Insights:**  
+  After processing, review the combined document insights including metadata, extracted text, and visualizations directly on the interface.
 
-Process Files: Click on \"✨ Process Files\" to extract text and
-metadata from the uploaded documents.
-
-Interacting with InsightX Ask Questions: Type your query into the text
-input. The AI engine will provide context-based responses by searching
-through the processed content.
-
-Quick Actions: Utilize the quick action buttons to extract entities,
-generate summaries, create visual insights, and more.
-
-Text-to-Speech: Convert AI responses to speech by clicking the \"🎙️ Get
-Voice Assistant\" button.
-
-Deployment Local Deployment Run the Streamlit application locally with
-the following command:
-
-bash Copy Edit streamlit run app.py Deploying on Streamlit Cloud Push to
-GitHub: Ensure your repository is up-to-date on GitHub.
-
-Set Up on Streamlit Cloud:
-
-Log in to Streamlit Cloud.
-
-Click \"New App\", select your repository and branch, and set app.py as
-the main file.
-
-Deploy your app.
-
-Environment Variables: Configure any necessary environment variables
-directly in the Streamlit Cloud dashboard.
-
-Contribution Guidelines We welcome contributions to enhance InsightX. To
-contribute:
-
-Fork the repository.
-
-Create a feature branch (git checkout -b feature/your-feature-name).
-
-Commit your changes and push your branch.
-
-Open a pull request with a detailed description of your changes.
-
-Follow our coding standards and document any new features.
-
-License This project is licensed under the MIT License.
-
-Contact For inquiries, support, or further information, please contact:
-
-Project Maintainer: Kaviyaa Priyadharshini
-
-Email: your-email@example.com
+---

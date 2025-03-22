@@ -44,6 +44,7 @@ def main():
             else:
                 with st.spinner("🔄 Processing your documents..."):
                     combined_text_pdf = ""
+                    combined_text_image=""
                     if pdf_docs:
                         st.info("🔍 Extracting from PDFs...")
                         combined_text_pdf += get_pdf_text(pdf_docs)

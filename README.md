@@ -6,18 +6,11 @@ InsightX is an advanced AI-driven solution designed to extract, analyze, and sum
 
 ## Table of Contents
 
-- [Deployment](#deployment)
 - [Features](#features)
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
-
----
-
-## Deployment
-
-[https://ai-insightx.streamlit.app/](https://ai-insightx.streamlit.app/)
 
 ---
 
